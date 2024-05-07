@@ -1,0 +1,92 @@
+.slider-container{
+  height: 100vh;
+  width: 400vw;
+  /* overflow-x: scroll; */
+  position: relative;
+}
+
+
+.slider{
+  display: flex;
+  width: auto;
+  transition:all 0.2s 0.6s;
+}
+
+.img{
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  position: absolute;
+  top: 0;
+}
+
+.img img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition-duration: 0.4s;
+}
+
+.full-container{
+  overflow-x: hidden;
+}
+
+.right-button{
+  position:absolute;
+  height: 100%;
+  right: 0;
+  top: 0;
+  z-index: 2;
+}
+
+.left-button{
+  position:absolute;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 2;
+}
+
+
+.person{
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.person img{
+  transition-duration: 0.3s;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.hover-image{
+  position: absolute;
+  top: 55px;
+  height: 30px;
+  transition-duration: 1s;
+  z-index: 4;
+}
+
+.cloud{
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+}
+
+.text{
+  position: absolute;
+  top: 50%;
+  left: 0;
+  display: flex;
+  transform: translateY(-50%);
+  z-index: 6;
+}
+
+.text>div{
+  width: 100vw;
+  
+}
