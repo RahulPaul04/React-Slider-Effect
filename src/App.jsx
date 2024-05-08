@@ -11,6 +11,7 @@ import slideman_4 from "./images/slideman_4.png"
 import cloud from "./images/clouds.webp"
 import rainbow from "./images/rainbow2.png"
 import birds from "./images/birds.webp"
+import arrow from "./images/arrow.png"
 
 
 const imageUrls = [
@@ -36,6 +37,7 @@ function customEasing(progress) {
 
 function App() {
   const canvasRef = useRef(null);
+  const canvasRef2 = useRef(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(3);
   const [nextImageIndex, setNextImageIndex] = useState(0);
   // const [progress, setProgress] = useState(0);
@@ -44,13 +46,23 @@ function App() {
   const [transdur,setransdur] = useState(0.5)
   const [floattext,setfloattext] = useState(1)
 
+  const [currentImageAspectRatio, setCurrentImageAspectRatio] = useState(1);
+  const [nextImageAspectRatio, setNextImageAspectRatio] = useState(1);
+
   let intervalId
   console.log("floatimage",floatingimage);
   console.log("floattext",floattext);
 
+
+  const calculateImageWidth = (imageHeight, aspectRatio) => {
+    return imageHeight * aspectRatio;
+  };
+
   const draw = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
+    const canvas2 = canvasRef2.current
+    const ctx2 = canvas2.getContext('2d')
     const currentImage = new Image();
     const nextImage = new Image();
     currentImage.src = imageUrls[currentImageIndex];
@@ -60,11 +72,27 @@ function App() {
     const numFrames = 20;
     const animationDuration = 500; // 1 second
 
-    canvas.width = window.innerWidth * ratio;
-  canvas.height = canvas.offsetHeight * ratio;
+    // canvas.width = window.innerWidth * ratio;
+  canvas.height =  window.innerHeight * ratio;
+  canvas2.height = window.innerHeight * ratio;
 
-  canvas.style.width = `${window.innerWidth}px`;
-  canvas.style.height = `${canvas.offsetHeight}px`;
+  // canvas.style.width = `${window.innerWidth}px`;
+  canvas.style.height = `100%`;
+  canvas2.style.height = '100%'
+
+  currentImage.onload = () => {
+    setCurrentImageAspectRatio(currentImage.width / currentImage.height);
+    let width_val = calculateImageWidth(canvas.height, currentImageAspectRatio);
+    canvas.width = width_val > window.innerWidth?width_val:innerWidth*ratio
+    canvas.style.width = canvas.width>window.innerWidth? `${canvas.width /ratio}px`:window.innerWidth/ratio;
+    canvas2.width = width_val > window.innerWidth?width_val:innerWidth*ratio
+    canvas2.style.width = canvas.width>window.innerWidth? `${canvas2.width /ratio}px`:window.innerWidth/ratio;
+    console.log("width of canvas",canvas.width,canvas.style.width);
+  };
+
+  nextImage.onload = () => {
+    setNextImageAspectRatio(nextImage.width / nextImage.height);
+  };
 
   ctx.scale(ratio, ratio);
 
@@ -83,11 +111,17 @@ function App() {
         const currentOffset = customEasing(progress) * canvas.width;
         const nextOffset = ((1 - customEasing(progress))*20) * canvas.width 
 
+        
+
         ctx.globalAlpha = progress;
         ctx.drawImage(nextImage, -nextOffset, 0, (canvas.width) + nextOffset, canvas.height);
 
         ctx.globalAlpha = 1 - progress;
         ctx.drawImage(currentImage, 0, 0, canvas.width + currentOffset*5, canvas.height);
+
+        if(currentFrame != 0){
+          ctx2.drawImage(canvas, 0, 0)
+        }
         
 
         currentFrame++;
@@ -202,32 +236,34 @@ let style_text = {transform: `translateX(-${floattext*100}vw)translateY(-20%)`,t
 
 
   return (
-    <div className='full-container' style={{height:"100vh",position:"relative"}}>
+    <div className='full-container' style={{height:"100dvh",position:"relative"}}>
       <canvas style={{height:"100%",width:"100%",objectFit:"cover"}} ref={canvasRef}   />
-      <div className="right-button col-md-4 col-6" onClick={handleNextImage}>
+      <canvas style={{height:"100%",width:"100%",objectFit:"cover",position:'absolute',top:'0',left:'0'}} ref={canvasRef2} /> {/* Second canvas */}
 
+      <div className="right-button col-md-4 col-6" onClick={handleNextImage}>
+        <img style={{transform:'rotate(180deg)'}} className='img-fluid arrow left-arrow' src={arrow} alt="" />
       </div>
       <div className="left-button col-md-4 col-6" onClick={handlePrevImage}>
-
+          <img  className='img-fluid arrow right-arrow' src={arrow} alt="" />
       </div>
       <div className="hover-image d-flex" style={style_cloud}>
-      <div className="cloud">
-          <img height={200} src={cloud} alt="" />
+        <div className="cloud">
+          <img  src={cloud} alt="" />
         </div>
         <div className="cloud">
-          <img height={200} src={birds} alt="" />
+          <img  src={birds} alt="" />
         </div>
         <div className="cloud">
-          <img height={200} src={cloud} alt="" />
+          <img  src={cloud} alt="" />
         </div>
         <div className="cloud">
-          <img height={200} src={rainbow} alt="" />
+          <img  src={rainbow} alt="" />
         </div>
         <div className="cloud">
-          <img height={200} src={cloud} alt="" />
+          <img  src={cloud} alt="" />
         </div>
         <div className="cloud">
-          <img height={200} src={birds} alt="" />
+          <img  src={birds} alt="" />
         </div>
        
        
@@ -235,7 +271,7 @@ let style_text = {transform: `translateX(-${floattext*100}vw)translateY(-20%)`,t
        
       </div>
       <div className="text" style={style_text}>
-      <div className='d-flex justify-content-around align-items-center'>
+            <div className='d-md-flex justify-content-around align-items-center text-center'>
               <h1 style={{fontSize:'80px',fontWeight:'800',color:"white"}}>Natural <br /> Blend</h1>
               <div>
                 <h2 style={{fontSize:'60px',fontWeight:'800',color:"rgba(255,255,255,0.5)"}}>04.</h2>
@@ -244,7 +280,7 @@ let style_text = {transform: `translateX(-${floattext*100}vw)translateY(-20%)`,t
              
             </div>
         
-            <div className='d-flex justify-content-around align-items-center'>
+            <div className='d-md-flex justify-content-around align-items-center text-center'>
               <h1 style={{fontSize:'80px',fontWeight:'800',color:"white"}}>Natural <br /> Blend</h1>
               <div>
                 <h2 style={{fontSize:'60px',fontWeight:'800',color:"rgba(255,255,255,0.5)"}}>01.</h2>
@@ -252,7 +288,7 @@ let style_text = {transform: `translateX(-${floattext*100}vw)translateY(-20%)`,t
                 </div>
              
             </div>
-            <div className='d-flex justify-content-around align-items-center'>
+            <div className='d-md-flex justify-content-around align-items-center text-center'>
               <h1 style={{fontSize:'80px',fontWeight:'800',color:"white"}}>Natural <br /> Blend</h1>
               <div>
                 <h2 style={{fontSize:'60px',fontWeight:'800',color:"rgba(255,255,255,0.5)"}}>02.</h2>
@@ -260,7 +296,7 @@ let style_text = {transform: `translateX(-${floattext*100}vw)translateY(-20%)`,t
                 </div>
              
             </div>
-            <div className='d-flex justify-content-around align-items-center'>
+            <div className='d-md-flex justify-content-around align-items-center text-center'>
               <h1 style={{fontSize:'80px',fontWeight:'800',color:"white"}}>Natural <br /> Blend</h1>
               <div>
                 <h2 style={{fontSize:'60px',fontWeight:'800',color:"rgba(255,255,255,0.5)"}}>03.</h2>
@@ -268,7 +304,7 @@ let style_text = {transform: `translateX(-${floattext*100}vw)translateY(-20%)`,t
                 </div>
              
             </div>
-            <div className='d-flex justify-content-around align-items-center'>
+            <div className='d-md-flex justify-content-around align-items-center text-center'>
               <h1 style={{fontSize:'80px',fontWeight:'800',color:"white"}}>Natural <br /> Blend</h1>
               <div>
                 <h2 style={{fontSize:'60px',fontWeight:'800',color:"rgba(255,255,255,0.5)"}}>04.</h2>
@@ -277,7 +313,7 @@ let style_text = {transform: `translateX(-${floattext*100}vw)translateY(-20%)`,t
              
             </div>
 
-            <div className='d-flex justify-content-around align-items-center'>
+            <div className='d-md-flex justify-content-around align-items-center text-center'>
               <h1 style={{fontSize:'80px',fontWeight:'800',color:"white"}}>Natural <br /> Blend</h1>
               <div>
                 <h2 style={{fontSize:'60px',fontWeight:'800',color:"rgba(255,255,255,0.5)"}}>01.</h2>

@@ -29,6 +29,7 @@
 
 .full-container{
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .right-button{
@@ -36,7 +37,7 @@
   height: 100%;
   right: 0;
   top: 0;
-  z-index: 2;
+  z-index: 10;
 }
 
 .left-button{
@@ -44,7 +45,7 @@
   height: 100%;
   left: 0;
   top: 0;
-  z-index: 2;
+  z-index: 10;
 }
 
 
@@ -75,6 +76,7 @@
   width: 100vw;
   display: flex;
   justify-content: center;
+  height: 200px;
 }
 
 .text{
@@ -89,4 +91,33 @@
 .text>div{
   width: 100vw;
   
+}
+
+@media(max-width:576px){
+  .cloud{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    height: 150px;
+  }
+}
+
+.arrow{
+  width: 40%;
+  opacity: 0.7;
+}
+
+.right-button,.left-button{
+  display: flex;
+  align-items: center;
+  
+}
+.right-button{
+  justify-content: end;
+  padding: 10px;
+}
+
+.left-button{
+  justify-content: start;
+  padding: 10px;
 }
