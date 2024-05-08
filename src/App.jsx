@@ -79,8 +79,8 @@ function App() {
   currentImage.onload = () => {
     setCurrentImageAspectRatio(currentImage.width / currentImage.height);
     let width_val = calculateImageWidth(canvas.height, currentImageAspectRatio);
-    canvas.width = width_val > window.innerWidth?width_val:innerWidth*ratio
-    canvas.style.width = canvas.width>window.innerWidth? `${canvas.width /ratio}px`:window.innerWidth/ratio;
+    canvas.width = width_val > window.innerWidth?width_val*ratio:innerWidth*ratio
+    canvas.style.width = window.innerWidth/ratio;
     
     console.log("width of canvas",canvas.width,canvas.style.width);
   };
