@@ -37,7 +37,6 @@ function customEasing(progress) {
 
 function App() {
   const canvasRef = useRef(null);
-  const canvasRef2 = useRef(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(3);
   const [nextImageIndex, setNextImageIndex] = useState(0);
   // const [progress, setProgress] = useState(0);
@@ -61,8 +60,7 @@ function App() {
   const draw = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    const canvas2 = canvasRef2.current
-    const ctx2 = canvas2.getContext('2d')
+    
     const currentImage = new Image();
     const nextImage = new Image();
     currentImage.src = imageUrls[currentImageIndex];
@@ -74,19 +72,16 @@ function App() {
 
     // canvas.width = window.innerWidth * ratio;
   canvas.height =  window.innerHeight * ratio;
-  canvas2.height = window.innerHeight * ratio;
 
   // canvas.style.width = `${window.innerWidth}px`;
   canvas.style.height = `100%`;
-  canvas2.style.height = '100%'
 
   currentImage.onload = () => {
     setCurrentImageAspectRatio(currentImage.width / currentImage.height);
     let width_val = calculateImageWidth(canvas.height, currentImageAspectRatio);
     canvas.width = width_val > window.innerWidth?width_val:innerWidth*ratio
     canvas.style.width = canvas.width>window.innerWidth? `${canvas.width /ratio}px`:window.innerWidth/ratio;
-    canvas2.width = width_val > window.innerWidth?width_val:innerWidth*ratio
-    canvas2.style.width = canvas.width>window.innerWidth? `${canvas2.width /ratio}px`:window.innerWidth/ratio;
+    
     console.log("width of canvas",canvas.width,canvas.style.width);
   };
 
@@ -119,9 +114,7 @@ function App() {
         ctx.globalAlpha = 1 - progress;
         ctx.drawImage(currentImage, 0, 0, canvas.width + currentOffset*5, canvas.height);
 
-        if(currentFrame != 0){
-          ctx2.drawImage(canvas, 0, 0)
-        }
+       
         
 
         currentFrame++;
@@ -238,7 +231,6 @@ let style_text = {transform: `translateX(-${floattext*100}vw)translateY(-20%)`,t
   return (
     <div className='full-container' style={{height:"100dvh",position:"relative"}}>
       <canvas style={{height:"100%",width:"100%",objectFit:"cover"}} ref={canvasRef}   />
-      <canvas style={{height:"100%",width:"100%",objectFit:"cover",position:'absolute',top:'0',left:'0'}} ref={canvasRef2} /> {/* Second canvas */}
 
       <div className="right-button col-md-4 col-6" onClick={handleNextImage}>
         <img style={{transform:'rotate(180deg)'}} className='img-fluid arrow left-arrow' src={arrow} alt="" />
